@@ -6,8 +6,8 @@ public class Risk
     private long projectID;     // Identifier for the associated project
     private String title;       // Short description of the risk
     private String description; // Detailed description of the risk
-    enum Impact { LOW, MEDIUM, HIGH, CRITICAL }; // Impact of the risk
-    enum Likelihood { LOW, MEDIUM, HIGH }; // Likelihood of the risk
+    enum Impact { LOW, MEDIUM, HIGH, CRITICAL } // Impact of the risk
+    enum Likelihood { LOW, MEDIUM, HIGH } // Likelihood of the risk
     private Impact impact;
     private Likelihood likelihood;
     private String mitigationPlan; // Steps to reduce risk impact
@@ -115,28 +115,16 @@ public class Risk
         return likelihood;
     }
 
-    public void writeRisk(Risk risk)
+    public boolean addRisk(Risk risk)
     {
         try
         {
-            Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/risks",
-                    "root",
-                    "chelmsford");
+            Connection connection = getConnection();
 
-            /*String query = String.format("INSERT INTO risks (riskID, projectID, title, description, impact, likelihood, mitigationPlan, owner, status) VALUES (%d, %d, %s, %s, %s, %s, %s, %s, %s)",
-                    risk.getRiskID(),
-                    risk.getProjectID(),
-                    risk.getTitle(),
-                    risk.getDescription(),
-                    risk.generateImpact(getImpact()),
-                    risk.generateLikelihood(getLikelihood()),
-                    risk.getMitigationPlan(),
-                    risk.getOwner(),
-                    risk.getStatus());*/
-           // String query = "SELECT * FROM users";
-            Statement statement = connection.createStatement();
-           // PreparedStatement stmt = connection.prepareStatement("INSERT INTO risk(riskID, projectID, title, description, likelihood, impact, mitigation_plan, owner, status) VALUES (riskID, projectID, title, description, generateLikelihood(), generateImpact(), mitigation_plan, owner, status)");
-            //PreparedStatement stmt = connection.prepareStatement("INSERT INTO risk(riskID, projectID, title, description, likelihood, impact, mitigation_plan, owner, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            if (this.riskExists(connection, risk))
+            {
+                return false;
+            }
 ///
             try (PreparedStatement stmt = connection.prepareStatement("INSERT INTO risk(riskID, projectID, title, description, likelihood, impact, mitigation_plan, owner, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"))
             {
@@ -158,56 +146,62 @@ public class Risk
                 System.err.println("Error Code: " + e.getErrorCode());
                 e.printStackTrace(); // Print the stack trace for detailed error information
             }
-        ///
-            /*stmt.setInt(1, (int)riskID);
-            stmt.setInt(2, (int)projectID);
-            stmt.setString(3, title);
-            stmt.setString(4, description);
-            stmt.setString(5, generateLikelihood(likelihood));
-            stmt.setString(6, generateImpact(impact));
-            stmt.setString(7, mitigationPlan);
-            stmt.setString(8, owner);
-            stmt.setString(9, status);*/
-
-           /* PreparedStatement stmt = connection.prepareStatement("INSERT INTO risk(riskID, projectID, title) VALUES (?, ?, ?)");
-            stmt.setInt(1, (int)riskID);
-            stmt.setInt(2, (int)projectID);
-            String bob = "xyzx";
-            stmt.setString(3,bob);*/
-
-
-
-
-
-
-
-
-
-            // stmt.setString(1, email);
-           // stmt.setString(2, password);
-           // stmt.setDate(3, new Date());
-
-            //stmt.executeUpdate();
-
-           /* while (resultSet.next())
-            {
-                System.out.println(resultSet.getString("projectID"));
-                //System.out.println(resultSet.getString("password"));
-            }*/
-
-            // Connection con=null;
-           // PreparedStatement p=null;
-
-           // p =connection.prepareStatement(query);
-           // p.execute();
-
-          //  Statement statement = connection.createStatement();
-          //  ResultSet resultSet = statement.executeQuery("SELECT * FROM users");
 
         } catch(SQLException e) {
             //throw new RuntimeException(e);
             e.printStackTrace();
         }
+        return true;
+    }
+
+    public boolean deleteRisk(Risk risk)
+    {
+        try
+        {
+            Connection connection = getConnection();
+            Statement statement = connection.createStatement();
+
+///
+            try (PreparedStatement stmt = connection.prepareStatement("DELETE FROM risk WHERE riskID = ?"))
+            {
+                stmt.setInt(1, (int)risk.getRiskID());
+                stmt.execute();
+
+                System.out.println("Delete statement executed successfully.");
+            } catch (SQLException e) {
+                System.err.println("SQL Exception: " + e.getMessage());
+                System.err.println("SQL State: " + e.getSQLState());
+                System.err.println("Error Code: " + e.getErrorCode());
+                e.printStackTrace(); // Print the stack trace for detailed error information
+            }
+
+        } catch(SQLException e) {
+            //throw new RuntimeException(e);
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    private boolean riskExists(Connection connection, Risk risk)
+    {
+        try (PreparedStatement stmt = connection.prepareStatement("SELECT riskID FROM risk WHERE riskID = ?"))
+        {
+            stmt.setInt(1, (int)risk.getRiskID());
+
+            return stmt.executeQuery().next();
+
+        } catch (SQLException e) {
+            System.err.println("SQL Exception: " + e.getMessage());
+            System.err.println("SQL State: " + e.getSQLState());
+            System.err.println("Error Code: " + e.getErrorCode());
+            e.printStackTrace(); // Print the stack trace for detailed error information
+        }
+        return false;
+    }
+
+    private static Connection getConnection() throws SQLException {
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/risks", "root", "chelmsford");
+        return connection;
     }
 
     public String generateImpact(Impact impact)
