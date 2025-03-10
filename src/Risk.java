@@ -1,3 +1,11 @@
+/******************
+ * RISK CLASS
+ *
+ * Most BASIC layer of risk architecture
+ * Simple risk entity w/ components
+ *
+ */
+
 import java.sql.*;
 
 public class Risk
@@ -115,98 +123,9 @@ public class Risk
         return likelihood;
     }
 
-    public boolean addRisk(Risk risk)
+    public String generateImpact()
     {
-        try
-        {
-            Connection connection = getConnection();
-
-            if (this.riskExists(connection, risk))
-            {
-                return false;
-            }
-///
-            try (PreparedStatement stmt = connection.prepareStatement("INSERT INTO risk(riskID, projectID, title, description, likelihood, impact, mitigation_plan, owner, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"))
-            {
-                    stmt.setInt(1, (int)riskID);
-                    stmt.setInt(2, (int)projectID);
-                    stmt.setString(3, title);
-                    stmt.setString(4, description);
-                    stmt.setString(5, generateLikelihood(likelihood));
-                    stmt.setString(6, generateImpact(impact));
-                    stmt.setString(7, mitigationPlan);
-                    stmt.setString(8, owner);
-                    stmt.setString(9, status);
-                    stmt.executeUpdate();
-
-                System.out.println("Data inserted successfully.");
-            } catch (SQLException e) {
-                System.err.println("SQL Exception: " + e.getMessage());
-                System.err.println("SQL State: " + e.getSQLState());
-                System.err.println("Error Code: " + e.getErrorCode());
-                e.printStackTrace(); // Print the stack trace for detailed error information
-            }
-
-        } catch(SQLException e) {
-            //throw new RuntimeException(e);
-            e.printStackTrace();
-        }
-        return true;
-    }
-
-    public boolean deleteRisk(Risk risk)
-    {
-        try
-        {
-            Connection connection = getConnection();
-            Statement statement = connection.createStatement();
-
-///
-            try (PreparedStatement stmt = connection.prepareStatement("DELETE FROM risk WHERE riskID = ?"))
-            {
-                stmt.setInt(1, (int)risk.getRiskID());
-                stmt.execute();
-
-                System.out.println("Delete statement executed successfully.");
-            } catch (SQLException e) {
-                System.err.println("SQL Exception: " + e.getMessage());
-                System.err.println("SQL State: " + e.getSQLState());
-                System.err.println("Error Code: " + e.getErrorCode());
-                e.printStackTrace(); // Print the stack trace for detailed error information
-            }
-
-        } catch(SQLException e) {
-            //throw new RuntimeException(e);
-            e.printStackTrace();
-        }
-        return true;
-    }
-
-    private boolean riskExists(Connection connection, Risk risk)
-    {
-        try (PreparedStatement stmt = connection.prepareStatement("SELECT riskID FROM risk WHERE riskID = ?"))
-        {
-            stmt.setInt(1, (int)risk.getRiskID());
-
-            return stmt.executeQuery().next();
-
-        } catch (SQLException e) {
-            System.err.println("SQL Exception: " + e.getMessage());
-            System.err.println("SQL State: " + e.getSQLState());
-            System.err.println("Error Code: " + e.getErrorCode());
-            e.printStackTrace(); // Print the stack trace for detailed error information
-        }
-        return false;
-    }
-
-    private static Connection getConnection() throws SQLException {
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/risks", "root", "chelmsford");
-        return connection;
-    }
-
-    public String generateImpact(Impact impact)
-    {
-        switch (impact)
+        switch (this.impact)
         {
             case LOW:
                 return "LOW";
@@ -221,9 +140,9 @@ public class Risk
         }
     }
 
-    public String generateLikelihood(Likelihood likelihood)
+    public String generateLikelihood()
     {
-        switch (likelihood)
+        switch (this.likelihood)
         {
             case LOW:
                 return "LOW";
