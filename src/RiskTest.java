@@ -3,13 +3,18 @@ public class RiskTest {
     {
         //Risk r1 = new Risk();
 
-        RiskManager rm = new RiskManager();
+        RiskService riskService = new RiskService();
 
-        Risk r1 = rm.createRisk(1, 1, "Risk 1", "Risk 1 Description",
-                "Risk 1 Mitigation Plan", "Bob Owner", "Status", Risk.Likelihood.LOW, Risk.Impact.LOW);
-       // rm.deleteAll(547);
-        rm.addRisk(r1);
-       // rm.deleteRisk(r1);
+        riskService.deleteAll(547);
+
+        Boolean created = riskService.createRisk(2, 3, "Risk 1", "Risk 1 Description",
+                "Risk 1 Mitigation Plan", "Bob Owner", "Status", RiskEntity.Likelihood.LOW, RiskEntity.Impact.LOW);
+        assert created : "Risk was not created.";
+        RiskEntity r = riskService.getRisk(2, 3);
+        assert (r != null) : "Risk is null.";
+        assert r.getRiskID() == 1 : String.format("Expected 1, got riskID = %d", r.getRiskID());
+        assert r.getProjectID() == 1 : String.format("Expected 1, got projectID = %d", r.getProjectID());
+
 
 
     }

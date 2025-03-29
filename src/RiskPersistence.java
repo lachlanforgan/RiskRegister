@@ -7,25 +7,55 @@
  *
  */
 
+import java.lang.module.FindException;
 import java.sql.*;
 
-public class Operations
+public class RiskPersistence
 {
 
+    public static RiskEntity getRisk(Connection connection, long riskID, long projectID)
+    {
+        RiskEntity r = null;
+        try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM risk WHERE riskID = ? AND projectID = ?")) {
+            stmt.setInt(1, (int) riskID);
+            stmt.setInt(2, (int) projectID);
 
-    public static boolean addRisk(Connection connection, Risk risk)
+            ResultSet resultSet = stmt.executeQuery();
+
+            if (resultSet.next())
+            {
+                r = new RiskEntity();
+                r.setRiskID((long)resultSet.getInt("riskID"));
+                r.setProjectID((long)resultSet.getInt("projectID"));
+                r.setDescription(resultSet.getString("description"));
+            }
+            else
+            {
+                throw new FindException("Couldn't find risk.");
+            }
+
+        } catch (SQLException e) {
+            System.err.println("SQL Exception: " + e.getMessage());
+            System.err.println("SQL State: " + e.getSQLState());
+            System.err.println("Error Code: " + e.getErrorCode());
+            e.printStackTrace(); // Print the stack trace for detailed error information
+        }
+        return r;
+    }
+
+    public static boolean addRisk(Connection connection, RiskEntity riskEntity)
     {
         try (PreparedStatement stmt = connection.prepareStatement("INSERT INTO risk(riskID, projectID, title, description, likelihood, impact, mitigation_plan, owner, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"))
         {
-            stmt.setInt(1, (int)risk.getRiskID());
-            stmt.setInt(2, (int)risk.getProjectID());
-            stmt.setString(3, risk.getTitle());
-            stmt.setString(4, risk.getDescription());
-            stmt.setString(5, risk.generateLikelihood());
-            stmt.setString(6, risk.generateImpact());
-            stmt.setString(7, risk.getMitigationPlan());
-            stmt.setString(8, risk.getOwner());
-            stmt.setString(9, risk.getStatus());
+            stmt.setInt(1, (int) riskEntity.getRiskID());
+            stmt.setInt(2, (int) riskEntity.getProjectID());
+            stmt.setString(3, riskEntity.getTitle());
+            stmt.setString(4, riskEntity.getDescription());
+            stmt.setString(5, riskEntity.generateLikelihood());
+            stmt.setString(6, riskEntity.generateImpact());
+            stmt.setString(7, riskEntity.getMitigationPlan());
+            stmt.setString(8, riskEntity.getOwner());
+            stmt.setString(9, riskEntity.getStatus());
             stmt.executeUpdate();
 
             System.out.println("Data inserted successfully.");
@@ -41,13 +71,13 @@ public class Operations
         return true;
     }
 
-    public static boolean deleteRisk(Connection connection, Risk risk) {
+    public static boolean deleteRisk(Connection connection, RiskEntity riskEntity) {
         try {
             Statement statement = connection.createStatement();
 
 ///
             try (PreparedStatement stmt = connection.prepareStatement("DELETE FROM risk WHERE riskID = ?")) {
-                stmt.setInt(1, (int) risk.getRiskID());
+                stmt.setInt(1, (int) riskEntity.getRiskID());
                 stmt.execute();
 
                 System.out.println("Delete statement executed successfully.");
@@ -94,11 +124,21 @@ public class Operations
         return true;
     }
 
+    public static boolean riskExists(Connection connection, RiskEntity riskEntity) {
+        try (PreparedStatement stmt = connection.prepareStatement("SELECT riskID FROM risk WHERE riskID = ?")) {
+            stmt.setInt(1, (int) riskEntity.getRiskID());
 
+            return stmt.executeQuery().next();
 
-    private static Connection getConnection() throws SQLException {
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/risks", "root", "chelmsford");
-        return connection;
+        } catch (SQLException e) {
+            System.err.println("SQL Exception: " + e.getMessage());
+            System.err.println("SQL State: " + e.getSQLState());
+            System.err.println("Error Code: " + e.getErrorCode());
+            e.printStackTrace(); // Print the stack trace for detailed error information
+        }
+        return false;
     }
+
+
 
 }

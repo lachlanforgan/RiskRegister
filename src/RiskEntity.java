@@ -6,9 +6,7 @@
  *
  */
 
-import java.sql.*;
-
-public class Risk
+public class RiskEntity
 {
     private long riskID;        // Unique identifier for the risk
     private long projectID;     // Identifier for the associated project
@@ -23,7 +21,7 @@ public class Risk
     private String status;      // Status of the risk
 
     // General Constructor
-    public Risk()
+    public RiskEntity()
     {
         this.riskID = 0;
         this.projectID = 0;
@@ -36,8 +34,8 @@ public class Risk
         this.status = "";
     }
 
-    public Risk(int riskID, int projectID, String title, String description, String mitigationPlan, String owner, String status,
-                Likelihood likelihood, Impact impact)
+    public RiskEntity(int riskID, int projectID, String title, String description, String mitigationPlan, String owner, String status,
+                      Likelihood likelihood, Impact impact)
     {
         this.riskID = riskID;
         this.projectID = projectID;
