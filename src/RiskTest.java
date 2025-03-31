@@ -1,11 +1,15 @@
+// RISKTEST CLASS
+// Purpose: Test the different layers of the risk architecture
+
 public class RiskTest {
+
+    // main method
     public static void main(String[] args)
     {
-        //Risk r1 = new Risk();
+        RiskService riskService = new RiskService();    // create risk object for creating risks and
+                                                        // interacting with database
 
-        RiskService riskService = new RiskService();
-
-        riskService.deleteAll(547);
+        riskService.deleteAll(RiskService.PASSWORD);     // delete all risks from database
 
         Boolean created = riskService.createRisk(2, 3, "Risk 1", "Risk 1 Description",
                 "Risk 1 Mitigation Plan", "Bob Owner", "Status", RiskEntity.Likelihood.LOW, RiskEntity.Impact.LOW);

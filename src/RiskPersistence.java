@@ -13,8 +13,14 @@ import java.sql.*;
 public class RiskPersistence
 {
 
-    public static RiskEntity getRisk(Connection connection, long riskID, long projectID)
+    public static RiskEntity getRisk(long riskID, long projectID)
     {
+        Connection connection;
+        try {
+            connection = ConnectionManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         RiskEntity r = null;
         try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM risk WHERE riskID = ? AND projectID = ?")) {
             stmt.setInt(1, (int) riskID);
@@ -43,8 +49,14 @@ public class RiskPersistence
         return r;
     }
 
-    public static boolean addRisk(Connection connection, RiskEntity riskEntity)
+    public static boolean addRisk(RiskEntity riskEntity)
     {
+        Connection connection = null;
+        try {
+            connection = ConnectionManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         try (PreparedStatement stmt = connection.prepareStatement("INSERT INTO risk(riskID, projectID, title, description, likelihood, impact, mitigation_plan, owner, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"))
         {
             stmt.setInt(1, (int) riskEntity.getRiskID());
@@ -71,8 +83,9 @@ public class RiskPersistence
         return true;
     }
 
-    public static boolean deleteRisk(Connection connection, RiskEntity riskEntity) {
+    public static boolean deleteRisk(RiskEntity riskEntity) {
         try {
+            Connection connection = ConnectionManager.getConnection();
             Statement statement = connection.createStatement();
 
 ///
@@ -97,10 +110,40 @@ public class RiskPersistence
         return true;
     }
 
-        public static boolean deleteAll(Connection connection)
+    public static boolean deleteRisk(long riskID, long projectID) {
+        try {
+            Connection connection = ConnectionManager.getConnection();
+            Statement statement = connection.createStatement();
+
+///
+            try (PreparedStatement stmt = connection.prepareStatement("DELETE FROM risk WHERE riskID = ? AND projectID = ?")) {
+                stmt.setInt(1, (int) riskID);
+                stmt.setInt(2, (int) projectID);
+
+                stmt.execute();
+
+                System.out.println("Delete statement executed successfully.");
+            } catch (SQLException e) {
+                System.err.println("SQL Exception: " + e.getMessage());
+                System.err.println("SQL State: " + e.getSQLState());
+                System.err.println("Error Code: " + e.getErrorCode());
+                e.printStackTrace(); // Print the stack trace for detailed error information
+                return false;
+            }
+
+        } catch (SQLException e) {
+            //throw new RuntimeException(e);
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+        public static boolean deleteAll()
         {
             try
             {
+                Connection connection = ConnectionManager.getConnection();
                 Statement statement = connection.createStatement();
 
 ///
@@ -124,9 +167,37 @@ public class RiskPersistence
         return true;
     }
 
-    public static boolean riskExists(Connection connection, RiskEntity riskEntity) {
+    public static boolean riskExists(RiskEntity riskEntity) {
+        Connection connection;
+        try {
+            connection = ConnectionManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         try (PreparedStatement stmt = connection.prepareStatement("SELECT riskID FROM risk WHERE riskID = ?")) {
             stmt.setInt(1, (int) riskEntity.getRiskID());
+
+            return stmt.executeQuery().next();
+
+        } catch (SQLException e) {
+            System.err.println("SQL Exception: " + e.getMessage());
+            System.err.println("SQL State: " + e.getSQLState());
+            System.err.println("Error Code: " + e.getErrorCode());
+            e.printStackTrace(); // Print the stack trace for detailed error information
+        }
+        return false;
+    }
+
+    public static boolean riskExists(long riskID, long projectID) {
+        Connection connection;
+        try {
+            connection = ConnectionManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        try (PreparedStatement stmt = connection.prepareStatement("SELECT riskID FROM risk WHERE riskID = ? AND projectID = ?")) {
+            stmt.setInt(1, (int) riskID);
+            stmt.setInt(2, (int) projectID);
 
             return stmt.executeQuery().next();
 

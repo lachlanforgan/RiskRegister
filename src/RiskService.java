@@ -12,8 +12,10 @@ import java.sql.*;
 public class RiskService
 {
 
+    public static final int PASSWORD = 547;
+
     public boolean createRisk(int riskID, int projectID, String title, String description, String mitigationPlan, String owner, String status,
-                                 RiskEntity.Likelihood likelihood, RiskEntity.Impact impact)
+                              RiskEntity.Likelihood likelihood, RiskEntity.Impact impact)
     {
         RiskEntity r = new RiskEntity(riskID, projectID, title, description, mitigationPlan, owner, status, likelihood, impact);
         return this.createRisk(r);
@@ -21,45 +23,25 @@ public class RiskService
 
     public RiskEntity getRisk(long riskID, long projectID)
     {
-        try {
-            return RiskPersistence.getRisk(getConnection(), riskID, projectID);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return RiskPersistence.getRisk(riskID, projectID);
     }
 
     public boolean deleteAll(int pw)
     {
-        Connection connection = null;
-        try {
-            connection = getConnection();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        if (pw == 547)
-        {
-            RiskPersistence.deleteAll(connection);
-        }
+        if (pw == PASSWORD)
+            RiskPersistence.deleteAll();
         return true;
     }
 
     public boolean createRisk(RiskEntity riskEntity)
     {
-        try
+        if (RiskPersistence.riskExists(riskEntity))
         {
-            Connection connection = getConnection();
-
-            if (RiskPersistence.riskExists(connection, riskEntity))
-            {
-                System.out.println("Risk already exists.");
-                return false;
-            }
-            System.out.println("Adding risk to database...");
-            RiskPersistence.addRisk(connection, riskEntity);
-        } catch(SQLException e) {
-            //throw new RuntimeException(e);
-            e.printStackTrace();
+            System.out.println("Risk already exists.");
+            return false;
         }
+        System.out.println("Adding risk to database...");
+        RiskPersistence.addRisk(riskEntity);
         return true;
     }
 
@@ -69,9 +51,9 @@ public class RiskService
         {
             Connection connection = getConnection();
 
-            if (RiskPersistence.riskExists(connection, riskEntity))
+            if (RiskPersistence.riskExists(riskEntity))
             {
-                if (RiskPersistence.deleteRisk(connection, riskEntity)) {
+                if (RiskPersistence.deleteRisk(riskEntity)) {
                     System.out.println("Risk deleted from database: RISKID - " + riskEntity.getRiskID());
                     return true;
                 }
@@ -83,6 +65,35 @@ public class RiskService
             else
             {
                 System.out.println("No risk found: RISKID - " + riskEntity.getRiskID());
+                return true;
+            }
+        } catch(SQLException e) {
+            //throw new RuntimeException(e);
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    public boolean deleteRisk(long riskID, long projectID)
+    {
+        try
+        {
+            Connection connection = getConnection();
+
+            if (RiskPersistence.riskExists(riskID, projectID))
+            {
+                if (RiskPersistence.deleteRisk(riskID, projectID)) {
+                    System.out.println("Risk deleted from database: RISKID - " + riskID);
+                    return true;
+                }
+                else {
+                    System.out.println("FAILED to delete risk form database.");
+                    return false;
+                }
+            }
+            else
+            {
+                System.out.println("No risk found: RISKID - " + riskID);
                 return true;
             }
         } catch(SQLException e) {
