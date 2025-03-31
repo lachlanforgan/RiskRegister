@@ -95,7 +95,17 @@ public class RiskService
 
 
     private static Connection getConnection() throws SQLException {
-        return ConnectionManager.getConnection();
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/risks",
+                    "root",
+                    "chelmsford");
+            return connection;
+        }
+        catch(SQLException e) {
+            //throw new RuntimeException(e);
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
