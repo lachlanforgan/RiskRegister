@@ -1,17 +1,46 @@
 import java.sql.*;
+import javax.sql.DataSource;
+import com.mysql.cj.jdbc.MysqlDataSource;
 
 /**
  * DATABASE CONNECTION MANAGER
  * 
  * Handles database connections for the Risk Register application
- * Creates and provides database connections
+ * Creates and provides database connections using connection pooling
  */
 public class ConnectionManager {
     
-    private static final String HOST = "127.0.0.1:3306";
-    private static final String USER = "root";
-    private static final String PASSWORD = "chelmsford";
-    private static final String DEFAULT_DATABASE = "risks";
+    private static DataSource dataSource;
+    
+    /**
+     * Initialize the connection pool
+     */
+    private static synchronized void initDataSource() {
+        if (dataSource == null) {
+            try {
+                MysqlDataSource mysqlDS = new MysqlDataSource();
+                mysqlDS.setURL("jdbc:mysql://" + ConfigLoader.getProperty("db.host") + "/" + 
+                               ConfigLoader.getProperty("db.name"));
+                mysqlDS.setUser(ConfigLoader.getProperty("db.user"));
+                mysqlDS.setPassword(ConfigLoader.getProperty("db.password"));
+                
+                // Configure connection pool settings
+                mysqlDS.setMaxReconnects(3);
+                mysqlDS.setAutoReconnect(true);
+                
+                dataSource = mysqlDS;
+                
+                // Test connection
+                try (Connection conn = dataSource.getConnection()) {
+                    System.out.println("Database connection established successfully");
+                }
+            } catch (SQLException e) {
+                System.err.println("Failed to initialize connection pool: " + e.getMessage());
+                e.printStackTrace();
+                throw new RuntimeException("Database connection initialization failed", e);
+            }
+        }
+    }
     
     /**
      * Get a connection to the default database
@@ -19,17 +48,10 @@ public class ConnectionManager {
      * @throws SQLException if connection fails
      */
     public static Connection getConnection() throws SQLException {
-        try {
-            Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://" + HOST + "/" + DEFAULT_DATABASE,
-                    USER,
-                    PASSWORD);
-            return connection;
+        if (dataSource == null) {
+            initDataSource();
         }
-        catch(SQLException e) {
-            e.printStackTrace();
-            throw e;
-        }
+        return dataSource.getConnection();
     }
     
     /**
@@ -40,15 +62,16 @@ public class ConnectionManager {
      */
     public static Connection getConnection(String database) throws SQLException {
         try {
-            Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://" + HOST + "/" + database,
-                    USER,
-                    PASSWORD);
-            return connection;
-        }
-        catch(SQLException e) {
+            MysqlDataSource mysqlDS = new MysqlDataSource();
+            mysqlDS.setURL("jdbc:mysql://" + ConfigLoader.getProperty("db.host") + "/" + database);
+            mysqlDS.setUser(ConfigLoader.getProperty("db.user"));
+            mysqlDS.setPassword(ConfigLoader.getProperty("db.password"));
+            return mysqlDS.getConnection();
+        } catch(SQLException e) {
+            System.err.println("Failed to connect to database '" + database + "': " + e.getMessage());
             e.printStackTrace();
             throw e;
         }
     }
+}
 }

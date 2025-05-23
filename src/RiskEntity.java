@@ -23,6 +23,8 @@ public class RiskEntity
     // General Constructor
     public RiskEntity()
     {
+
+        // assignment everything to default values
         this.riskID = 0;
         this.projectID = 0;
         this.title = "";
@@ -34,6 +36,7 @@ public class RiskEntity
         this.status = "";
     }
 
+    // Constructor with parameters
     public RiskEntity(int riskID, int projectID, String title, String description, String mitigationPlan, String owner, String status,
                       Likelihood likelihood, Impact impact)
     {
@@ -121,6 +124,7 @@ public class RiskEntity
         return likelihood;
     }
 
+    // get string from impact ENUM
     public String generateImpact()
     {
         switch (this.impact)
@@ -138,6 +142,7 @@ public class RiskEntity
         }
     }
 
+    // get string from likelihood ENUM
     public String generateLikelihood()
     {
         switch (this.likelihood)

@@ -11,6 +11,7 @@ public class RiskTest {
 
         riskService.deleteAll(RiskService.PASSWORD);     // delete all risks from database
 
+        // try creating a risk in database
         Boolean created = riskService.createRisk(2, 3, "Risk 1", "Risk 1 Description",
                 "Risk 1 Mitigation Plan", "Bob Owner", "Status", RiskEntity.Likelihood.LOW, RiskEntity.Impact.LOW);
         assert created : "Risk was not created.";
