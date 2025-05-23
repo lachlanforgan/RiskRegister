@@ -1,0 +1,80 @@
+Lachlan Forgan
+Spring 2025
+Engagement/Source Summary
+
+Below is an outline and description of various sources I have recently interacted with, checked out, or used. Some of these sources/tools were used in the past few months or during this semester with the goal of replicating some of the information from the CSCI 200 course. Other sources/tools are those that I have used in the past year or throughout during my academic career, and were worth noting. The document is divided into topics, with relevant sources provided under each.
+
+
+CSCI 200 - Computer Science Professional Exploration Seminar (0.5 course-credit)
+A required seminar for all computer science majors to prepare them for their future careers. Topics include professional ethics, organizational issues, strategic interviewing techniques, industry research, team roles, oral and written communication skills, as well as other topics relevant to an effective job search and a positive work experience. Students begin developing their portfolios, a focused resume, and a succinct career objective. Students also identify their strengths, weaknesses and career interests in order to maximize the potential of a cooperative education experience, internship, or post-baccalaureate position. This course must be completed prior to participation in a cooperative or internship experience. This course may be waived with one (1) or more years of full-time relevant professional industry experience at the discretion of the department chair. NOTE: Open to Computer Science majors only. Prerequisite: Sophomore standing.
+0.500 Credit hours
+2.000 Lecture hours
+
+1. Professional Ethics
+ACM Code of Ethics and Professional Conduct
+ The ACM Code outlines essential ethical principles for computing professionals, including public responsibility, data privacy, fairness, and professional competence. It serves as a moral guide for software engineers, addressing situations involving system reliability, intellectual property, and the broader societal impact of computing.
+https://www.acm.org/code-of-ethics
+IEEE Code of Ethics
+ IEEE’s code emphasizes professional integrity, safety, and the duty to disclose factors that might endanger the public. It encourages engineers to avoid conflicts of interest, maintain transparency, and engage in lifelong learning—principles especially relevant in software development environments involving critical infrastructure or user data.
+https://www.computer.org/education/code-of-ethics
+2. Organizational Issues
+Agile vs. Scrum – Atlassian
+ This article compares Agile as a development philosophy with Scrum as a structured project management methodology. It highlights how Agile encourages iterative improvement, while Scrum enforces discipline through roles, sprint planning, and retrospectives. Understanding these distinctions is critical to functioning effectively in modern development teams.
+https://www.atlassian.com/agile/scrum/agile-vs-scrum
+What is Scrum? – Scrum.org
+ The Scrum.org guide presents Scrum as an empirical framework built on transparency, inspection, and adaptation. It introduces key components such as the Product Backlog, Sprint Review, and the Scrum Master role. The material helps clarify how developers can contribute to and benefit from tightly coordinated team workflows.
+https://www.scrum.org/resources/what-scrum-module
+3. Strategic Interviewing Techniques
+Interviewing.io
+ Interviewing.io facilitates live mock technical interviews with experienced engineers. It mimics real job interviews and provides feedback on technical proficiency and communication skills. The platform is especially valuable for practicing under pressure and refining interview techniques in both behavioral and algorithmic contexts.
+https://interviewing.io/mocks
+LeetCode
+ LeetCode offers a broad collection of programming challenges used by companies in coding interviews. Covering arrays, trees, graphs, and dynamic programming, it is a crucial tool for mastering the problem-solving skills required in technical interviews. The structured difficulty levels and time constraints mimic real interview scenarios.
+https://leetcode.com/problemset
+4. Industry Research
+TechCrunch
+ TechCrunch reports on startups, funding rounds, product launches, and industry trends. It offers timely insight into how the tech industry is evolving, particularly in the domains of artificial intelligence, cloud services, and developer platforms. This makes it valuable for staying competitive in job searches and identifying innovative employers.
+https://techcrunch.com
+WIRED Magazine
+ WIRED explores the intersection of technology with culture, business, and politics. Articles often dive into the ethical and societal consequences of technological advancement, helping developers understand the broader context in which their tools and systems operate.
+https://www.wired.com
+Ars Technica
+ Ars Technica provides in-depth technical journalism geared toward developers and IT professionals. Its content includes reviews of development tools, analyses of system architectures, and discussions of software policies, offering a more technical and detailed view than general news sources.
+https://arstechnica.com
+5. Team Roles
+GitHub Open Source Projects
+ Contributing to GitHub projects enables direct experience with collaborative development, including version control, code reviews, and bug tracking. Participants take on roles such as contributor, reviewer, and maintainer, gaining exposure to how real-world development teams divide responsibilities and manage coordination.
+https://github.com/topics/open-source-project
+
+6. Oral and Written Communication Skills
+YouTube: Tech Presentation Skills by Ex-Google Engineers
+ Several YouTube channels, such as TechLead and Exponent, offer free videos on how to clearly and confidently present technical concepts. These videos break down strategies for structuring technical talks, explaining code to non-engineers, and improving delivery without needing formal public speaking training. This is an effective and low-barrier way to improve communication skills relevant to interviews and team collaboration.
+https://www.youtube.com/results?search_query=technical+presentation+skills+for+engineers
+Medium
+ Medium allows developers to write tutorials, share learning experiences, and publish technical articles. It supports concise and structured writing, making it a useful tool for developing documentation and communication skills essential for back-end developers and engineers.
+ https://medium.com/tag/tech-blog
+DEV.to
+ DEV.to is a writing platform and community for software developers. It encourages knowledge sharing and feedback, helping users refine how they present ideas in writing. It's particularly helpful for writing explainers, project breakdowns, and learning logs.
+https://dev.to/t/blog
+7. Portfolio, Resume, and Career Objective Development
+Canva Resume Templates
+ Canva offers easy-to-customize resume templates that combine aesthetics with professionalism. It supports the creation of tailored resumes for specific software engineering roles, allowing developers to clearly present skills, experiences, and career objectives.
+https://www.canva.com/resumes/templates/
+Overleaf LaTeX Resume Templates
+ Overleaf provides structured LaTeX templates ideal for technical resumes. These templates are especially suited for clean formatting and highlight programming languages, projects, and achievements in a manner favored by many hiring managers in STEM fields.
+https://www.overleaf.com/latex/templates/tagged/cv
+8. Self-Assessment
+O*NET Interest Profiler
+ O*NET helps users align their interests with suitable career paths. It assesses preferences related to people, data, and problem-solving tasks, providing a detailed breakdown of compatible roles—including many within software engineering and back-end development.
+https://www.mynextmove.org/explore/ip
+16Personalities (MBTI-inspired)
+ This assessment gives insight into personality traits and working styles, such as introversion/extroversion and preference for structure or adaptability. The results can guide decisions about ideal work environments, team roles, and communication preferences.
+https://www.16personalities.com
+9. Internship or Job Preparation
+Upwork
+ Upwork connects freelancers to short-term projects and clients. It provides real-world experience in scoping, negotiating, and delivering software tasks, which builds practical exposure to client communication, deadlines, and professional accountability.
+https://www.upwork.com
+GitHub (for Job Readiness)
+ GitHub is used to showcase software projects to potential employers. It allows developers to document code, track issues, and demonstrate coding style and competency. A well-maintained GitHub portfolio is often considered equivalent to hands-on experience.
+https://github.com
+
